@@ -24,6 +24,23 @@ class Tesseract
         return $languages;
     }
     
+    public function getVersion()
+    {
+        return $this->execute('--version');
+    }
+    
+    /**
+     * Perform OCR on an image file
+     * 
+     * @param string $filename
+     *
+     * @return string Text recognized from the image
+     */
+    public function recognize($filename)
+    {
+        
+    }
+    
     /**
      * Execute command and return output
      * 
