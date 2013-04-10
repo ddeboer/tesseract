@@ -1,0 +1,17 @@
+{
+    "name": "ddeboer/tesseract",
+    "description": "A wrapper for the Tesseract OCR engine",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "David de Boer",
+            "email": "david@ddeboer.nl"
+        }
+    ],
+    "require": {
+
+    },
+    "autoload": {
+        "psr-0": { "Ddeboer\\Tesseract": "src" }
+    }
+}
