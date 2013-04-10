@@ -19,7 +19,7 @@ class Tesseract
      */
     public function getSupportedLanguages()
     {
-        $languages = $this->execute(array('--list-langs'));
+        $languages = $this->execute('--list-langs');
         // Shift to remove first line: List of available languages (x):
         \array_shift($languages);
         
@@ -28,7 +28,7 @@ class Tesseract
     
     public function getVersion()
     {
-        return $this->execute(array('--version'));
+        return $this->execute('--version');
     }
     
     /**
@@ -40,8 +40,12 @@ class Tesseract
      */
     public function recognize($filename, array $languages = null)
     {
+        if (null !== $languages) {
+            $languages = implode('+', $languages);
+        }
+        
         $tempFile = tempnam(sys_get_temp_dir(), 'tesseract');
-        $this->execute(array($filename, $tempFile));
+        $this->execute(\escapeshellarg($filename) . ' ' . $tempFile . ' -l ' . $languages);
         
         return \file_get_contents($tempFile . '.txt');
     }
@@ -54,19 +58,12 @@ class Tesseract
      *
      * @throws \RuntimeException
      */
-    protected function execute(array $parameters)
+    protected function execute($parameters)
     {
-        $escaped = \array_map(
-            function ($parameter) {
-                return escapeshellarg($parameter);
-            },
-            $parameters
-        );
-        
         $command = sprintf(
             '%s %s 2>&1',
             $this->path,
-            implode(' ', $escaped)
+            $parameters
         );
         
         \exec($command, $output, $returnVar);
