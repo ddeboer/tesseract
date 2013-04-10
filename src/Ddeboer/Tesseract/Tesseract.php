@@ -1,6 +1,8 @@
 <?php
 namespace Ddeboer\Tesseract;
 
+use Ddeboer\Tesseract\Exception\CommandException;
+
 class Tesseract
 {
     protected $path;
@@ -61,18 +63,16 @@ class Tesseract
             $parameters
         );
         
-        \exec(
-            sprintf(
-                '%s %s 2>&1',
-                $this->path,
-                implode(' ', $escaped)
-            ),
-            $output,
-            $returnVar
+        $command = sprintf(
+            '%s %s 2>&1',
+            $this->path,
+            implode(' ', $escaped)
         );
+        
+        \exec($command, $output, $returnVar);
 
         if ($returnVar !== 0) {
-            throw new \RuntimeException('Error occurred: ' . implode(', ', $output));
+            throw CommandException::factory($command, $output);
         }
         
         return $output;
