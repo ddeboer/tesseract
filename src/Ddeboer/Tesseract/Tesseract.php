@@ -96,7 +96,7 @@ class Tesseract
             )
         );
                 
-        return \file_get_contents($tempFile . '.txt');
+        return trim(\file_get_contents($tempFile . '.txt'));
     }
     
     /**
