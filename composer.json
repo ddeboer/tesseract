@@ -5,9 +5,12 @@
     "authors": [
         {
             "name": "David de Boer",
-            "email": "david@ddeboer.nl"
+            "email": "david@ddeboer.nl",
+            "homepage": "https://github.com/ddeboer"
         }
     ],
+    "keywords": [ "ocr", "optical character recognition", "scan", "text recognition" ],
+    "homepage": "https://github.com/ddeboer/tesseract",
     "require": {
 
     },
