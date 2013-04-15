@@ -2,6 +2,7 @@
 namespace Ddeboer\Tesseract;
 
 use Ddeboer\Tesseract\Exception\CommandException;
+use Symfony\Component\Process\ProcessBuilder;
 
 /**
  * A wrapper around the Tesseract CLI tool
@@ -47,7 +48,7 @@ class Tesseract
      */
     public function getSupportedLanguages()
     {
-        $languages = $this->execute('--list-langs');
+        $languages = $this->execute(array('--list-langs'));
         // Shift to remove first line: List of available languages (x):
         \array_shift($languages);
         
@@ -61,7 +62,7 @@ class Tesseract
      */
     public function getVersion()
     {
-        return $this->execute('--version');
+        return $this->execute(array('--version'));
     }
     
     /**
@@ -75,10 +76,6 @@ class Tesseract
      */
     public function recognize($filename, array $languages = null, $pageSegMode = self::PAGE_SEG_MODE_AUTOMATIC_OCR)
     {
-        if (null !== $languages) {
-            $languages = implode('+', $languages);
-        }
-        
         if ($pageSegMode < 0 || $pageSegMode > 10) {
             throw new \InvalidArgumentException(
                 'Page seg mode must be between 0 and 10'
@@ -86,15 +83,20 @@ class Tesseract
         }
         
         $tempFile = tempnam(sys_get_temp_dir(), 'tesseract');
-        $this->execute(
-            sprintf(
-                '%s %s -psm %s %s',
-                \escapeshellarg($filename),
-                $tempFile,
-                $pageSegMode,
-                $languages ? '-l ' . $languages : ''
-            )
+        
+        $arguments = array(
+            $filename,
+            $tempFile,
+            '-psm',
+            $pageSegMode
         );
+        
+        if (null !== $languages) {
+            $arguments[] = '-l';
+            $arguments[] = implode('+', $languages);
+        }
+        
+        $this->execute($arguments);
                 
         return trim(\file_get_contents($tempFile . '.txt'));
     }
@@ -107,20 +109,19 @@ class Tesseract
      *
      * @throws \RuntimeException
      */
-    protected function execute($parameters)
+    protected function execute(array $arguments)
     {
-        $command = sprintf(
-            '%s %s 2>&1',
-            $this->path,
-            $parameters
-        );
+        \array_unshift($arguments, $this->path);
         
-        \exec($command, $output, $returnVar);
-
-        if ($returnVar !== 0) {
-            throw CommandException::factory($command, $output);
+        $builder = ProcessBuilder::create($arguments);
+        $process = $builder->getProcess();
+        $process->run();
+        
+        if (!$process->isSuccessful()) {
+            throw CommandException::factory($process);
         }
         
-        return $output;
+        // E.g. tesseract --version returns output as error output
+        return $process->getOutput() ? $process->getOutput() : $process->getErrorOutput();
     }
 }

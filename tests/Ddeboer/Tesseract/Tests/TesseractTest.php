@@ -17,7 +17,7 @@ class TesseractTest extends \PHPUnit_Framework_TestCase
     {
         $tesseract = new Tesseract();
         $version = $tesseract->getVersion();
-        $this->assertContains('tesseract 3.', $version[0]);
+        $this->assertContains('tesseract 3.', $version);
     }
     
     public function testRecognizePng()

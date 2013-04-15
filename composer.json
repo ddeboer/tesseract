@@ -12,7 +12,7 @@
     "keywords": [ "ocr", "optical character recognition", "scan", "text recognition" ],
     "homepage": "https://github.com/ddeboer/tesseract",
     "require": {
-
+        "symfony/process": "*"
     },
     "autoload": {
         "psr-0": { "Ddeboer\\Tesseract": "src" }
