@@ -48,8 +48,9 @@ class Tesseract
      */
     public function getSupportedLanguages()
     {
-        $languages = $this->execute(array('--list-langs'));
-        // Shift to remove first line: List of available languages (x):
+        $languages = \explode(\PHP_EOL, $this->execute(array('--list-langs')));
+        
+        // Shift to remove first line: 'List of available languages (x)':
         \array_shift($languages);
         
         return $languages;
