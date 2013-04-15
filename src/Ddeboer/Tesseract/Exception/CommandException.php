@@ -21,8 +21,11 @@ class CommandException extends \RuntimeException
     
     public static function factory(Process $process)
     {
-        $error = $process->getErrorOutput();
-        
+        // Combine STDOUT and STDERR output, because Tesseract is rather messy
+        // about separating the two correctly. See, e.g.,
+        // https://code.google.com/p/tesseract-ocr/issues/detail?id=813,
+        $error = $process->getOutput() . "\n" . $process->getErrorOutput();
+
         if (false !== stripos($error, self::ERROR_LANGUAGE)) {
             return new UnsupportedLanguageException($process);
         } elseif (false !== stripos($error, self::ERROR_IMAGE_TYPE)) {
