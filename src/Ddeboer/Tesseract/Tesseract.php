@@ -98,8 +98,18 @@ class Tesseract
         }
         
         $this->execute($arguments);
-                
-        return trim(\file_get_contents($tempFile . '.txt'));
+
+        $recognizedText = trim(\file_get_contents($tempFile . '.txt'));
+
+        if (file_exists($tempFile)) {
+            unlink($tempFile);
+        }
+
+        if (file_exists($tempFile . '.txt')) {
+            unlink($tempFile . '.txt');
+        }
+
+        return $recognizedText;
     }
     
     /**
