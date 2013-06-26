@@ -15,7 +15,7 @@ installation and adding language support, see Tesseract's [README](https://code.
 Then install this library, which is available on [Packagist](http://packagist.org/packages/ddeboer/tesseract),
 through [Composer](http://getcomposer.org/):
 
-    $ composer require ddeboer/tesseract:1.0
+    $ composer require ddeboer/tesseract:1.*
 
 Usage
 -----
