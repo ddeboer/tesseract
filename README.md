@@ -3,14 +3,14 @@
 Tesseract: a wrapper for the Tesseract OCR engine
 ================================================
 
-A small PHP >=5.3 library that makes working with the open source [Tesseract OCR engine](https://code.google.com/p/tesseract-ocr/) 
+A small PHP >=5.3 library that makes working with the open source [Tesseract OCR engine](https://github.com/tesseract-ocr) 
 easier.
 
 Installation
 ------------
 
 You need a working Tesseract installation. For more information about 
-installation and adding language support, see Tesseract's [README](https://code.google.com/p/tesseract-ocr/wiki/ReadMe).
+installation and adding language support, see Tesseract’s [README](https://github.com/tesseract-ocr/tesseract/blob/master/README.md).
 
 Then install this library, which is available on [Packagist](http://packagist.org/packages/ddeboer/tesseract),
 through [Composer](http://getcomposer.org/):
